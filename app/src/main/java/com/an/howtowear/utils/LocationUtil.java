@@ -1,4 +1,4 @@
-package com.an.howtowear.uitls;
+package com.an.howtowear.utils;
 
 import android.content.Context;
 import android.location.Location;

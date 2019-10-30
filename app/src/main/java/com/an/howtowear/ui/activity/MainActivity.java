@@ -1,28 +1,43 @@
 package com.an.howtowear.ui.activity;
 
-import android.app.Activity;
+import android.content.IntentFilter;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.an.howtowear.R;
 import com.an.howtowear.network.HttpRequestHelper;
 import com.an.howtowear.network.response.WeatherInfoResponse;
-import com.an.howtowear.uitls.LocationUtil;
+import com.an.howtowear.receiver.EventReceiver;
+import com.an.howtowear.utils.AlarmUtil;
+import com.an.howtowear.utils.LocationUtil;
+import com.an.howtowear.utils.NotificationUtil;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends Activity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
 
     private TextView tvWeatherInfo;
     private TextView tvLocationData;
     private Button btnWeatherInfo;
+    private Button btnNotification;
+
+    private EventReceiver eventReceiver;
 
     private double latitude = 0;
     private double longitude = 0;
@@ -33,12 +48,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tvWeatherInfo = (TextView) findViewById(R.id.tv_weatherInfo);
-        tvLocationData = (TextView) findViewById(R.id.tv_locationData);
-        btnWeatherInfo = (Button) findViewById(R.id.btn_weatherInfo);
-        btnWeatherInfo.setOnClickListener(this);
-
+        this.initLayout();
         getLocationData();
+        AlarmUtil.getInstance().setAlarm();
+
+        eventReceiver = new EventReceiver();
+        registerReceiver(eventReceiver,new IntentFilter(AlarmUtil.ACTION_ALARM));
 
     }
 
@@ -54,9 +69,70 @@ public class MainActivity extends Activity implements View.OnClickListener {
             case R.id.btn_weatherInfo:
                 requestWeatherInfo();
                 break;
+
+            case R.id.btn_notification:
+                NotificationUtil.getNotificationUtil().showNotificationMessage();
+                break;
             default:
                 break;
         }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId())
+        {
+            case R.id.menuitem1:
+                Toast.makeText(getApplicationContext(), "SelectedItem 1", Toast.LENGTH_SHORT).show();
+            case R.id.menuitem2:
+                Toast.makeText(getApplicationContext(), "SelectedItem 2", Toast.LENGTH_SHORT).show();
+            case R.id.menuitem3:
+                Toast.makeText(getApplicationContext(), "SelectedItem 3", Toast.LENGTH_SHORT).show();
+        }
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    public void initLayout(){
+        //toolBar를 통해 App Bar 생성
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        //App Bar의 좌측 영영에 Drawer를 Open 하기 위한 Incon 추가
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_launcher);
+
+        DrawerLayout drawLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
+                this,
+                drawLayout,
+                toolbar,
+                R.string.open,
+                R.string.close
+        );
+
+        drawLayout.addDrawerListener(actionBarDrawerToggle);
+
+        tvWeatherInfo = (TextView) findViewById(R.id.tv_weatherInfo);
+        tvLocationData = (TextView) findViewById(R.id.tv_locationData);
+        btnWeatherInfo = (Button) findViewById(R.id.btn_weatherInfo);
+        btnNotification = (Button) findViewById(R.id.btn_notification);
+        btnWeatherInfo.setOnClickListener(this);
+        btnNotification.setOnClickListener(this);
     }
 
     private void getLocationData(){
