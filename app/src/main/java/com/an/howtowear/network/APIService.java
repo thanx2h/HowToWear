@@ -12,5 +12,5 @@ public interface APIService {
     Call<ForecastListResponse> getForecastList(
             @Query("lat") double lat,
             @Query("lon") double lon,
-            @Query("cnt") double cnt);
+            @Query("cnt") int cnt);
 }

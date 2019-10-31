@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Call<ForecastListResponse> call
                 = HttpRequestHelper.getInstance().getApiService().getForecastList(latitude, longitude, DATA_COUNT);
 
-        Callback<ForecastListResponse> callback = new Callback<ForecastListResponse>() { //리스폰 시, 대응할 구현체
+        final Callback<ForecastListResponse> callback = new Callback<ForecastListResponse>() { //리스폰 시, 대응할 구현체
             @Override
             public void onResponse(Call<ForecastListResponse> call, Response<ForecastListResponse> response) {
 
@@ -165,8 +165,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 StringBuilder sb = new StringBuilder();
                 sb.append("onResponse\n\n");
-                sb.append(call.toString());
-                sb.append("\n\n"+response.body().toString());
+
+                if (response.code() == 200) {
+                    sb.append(call.toString());
+                    sb.append("\n\n"+response.body().toString());
+                } else {
+                    sb.append(call.toString());
+                    sb.append("\n\n"+response.code());
+                }
+
                 tvWeatherInfo.setText("" + sb.toString());
             }
 
