@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import com.an.howtowear.R;
 import com.an.howtowear.network.HttpRequestHelper;
-import com.an.howtowear.network.response.WeatherInfoResponse;
+import com.an.howtowear.network.response.ForecastListResponse;
 import com.an.howtowear.receiver.EventReceiver;
 import com.an.howtowear.utils.AlarmUtil;
 import com.an.howtowear.utils.LocationUtil;
@@ -32,9 +32,11 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
 
+    private static final int DATA_COUNT = 5;
+
     private TextView tvWeatherInfo;
     private TextView tvLocationData;
-    private Button btnWeatherInfo;
+    private Button btnRequestForecast;
     private Button btnNotification;
 
     private EventReceiver eventReceiver;
@@ -84,10 +86,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         {
             case R.id.menuitem1:
                 Toast.makeText(getApplicationContext(), "SelectedItem 1", Toast.LENGTH_SHORT).show();
+                break;
             case R.id.menuitem2:
                 Toast.makeText(getApplicationContext(), "SelectedItem 2", Toast.LENGTH_SHORT).show();
+                break;
             case R.id.menuitem3:
                 Toast.makeText(getApplicationContext(), "SelectedItem 3", Toast.LENGTH_SHORT).show();
+                break;
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -129,10 +134,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         tvWeatherInfo = (TextView) findViewById(R.id.tv_weatherInfo);
         tvLocationData = (TextView) findViewById(R.id.tv_locationData);
-        btnWeatherInfo = (Button) findViewById(R.id.btn_weatherInfo);
+        btnRequestForecast = (Button) findViewById(R.id.btn_weatherInfo);
         btnNotification = (Button) findViewById(R.id.btn_notification);
-        btnWeatherInfo.setOnClickListener(this);
+        btnRequestForecast.setOnClickListener(this);
         btnNotification.setOnClickListener(this);
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     private void getLocationData(){
@@ -142,17 +148,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String[] locationData = LocationUtil.getInstance().requestLocationManually().split(":");
             latitude = Double.parseDouble(locationData[0]);
             longitude = Double.parseDouble(locationData[1]);
-            btnWeatherInfo.setText("Manually\n\n, latitude: "+ locationData[0] +", longitude: "+ locationData[1]);
+            btnRequestForecast.setText("Manually\n\n, latitude: "+ locationData[0] +", longitude: "+ locationData[1]);
         }
     }
 
     private void requestWeatherInfo(){
-        Call<WeatherInfoResponse> call
-                = HttpRequestHelper.getInstance().getApiService().getWeatherInfo(latitude, longitude);
+        Call<ForecastListResponse> call
+                = HttpRequestHelper.getInstance().getApiService().getForecastList(latitude, longitude, DATA_COUNT);
 
-        Callback<WeatherInfoResponse> callback = new Callback<WeatherInfoResponse>() { //리스폰 시, 대응할 구현체
+        Callback<ForecastListResponse> callback = new Callback<ForecastListResponse>() { //리스폰 시, 대응할 구현체
             @Override
-            public void onResponse(Call<WeatherInfoResponse> call, Response<WeatherInfoResponse> response) {
+            public void onResponse(Call<ForecastListResponse> call, Response<ForecastListResponse> response) {
 
                 Log.e("HowToWear", call.toString());
                 Log.e("HowToWear", response.toString());
@@ -165,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             @Override
-            public void onFailure(Call<WeatherInfoResponse> call, Throwable t) {
+            public void onFailure(Call<ForecastListResponse> call, Throwable t) {
                 Log.e("HowToWear", call.toString());
                 Log.e("HowToWear", t.getMessage());
 
