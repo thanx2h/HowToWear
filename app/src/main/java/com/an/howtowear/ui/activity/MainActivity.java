@@ -1,6 +1,7 @@
 package com.an.howtowear.ui.activity;
 
 import android.content.IntentFilter;
+import android.location.Address;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
@@ -148,7 +149,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String[] locationData = LocationUtil.getInstance().requestLocationManually().split(":");
             latitude = Double.parseDouble(locationData[0]);
             longitude = Double.parseDouble(locationData[1]);
-            btnRequestForecast.setText("Manually\n\n, latitude: "+ locationData[0] +", longitude: "+ locationData[1]);
+            tvLocationData.setText("Manually\n\n, latitude: "+ locationData[0] +", longitude: "+ locationData[1]+"\n");
+
+            Address address = LocationUtil.getInstance().getAddressFromLatLon(latitude, longitude);
+            tvLocationData.setText(address.getAddressLine(0)+"\n");
         }
     }
 
@@ -197,6 +201,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public void onLocationChanged(Location location) {
             latitude = location.getLatitude();
             longitude = location.getLongitude();
+
+            Address address = LocationUtil.getInstance().getAddressFromLatLon(latitude, longitude);
+            tvLocationData.setText(address.getAddressLine(0)+"\n");
             tvLocationData.setText("latitude: "+ latitude +", longitude: "+ longitude);
         }
 

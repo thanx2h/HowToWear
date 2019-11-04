@@ -1,11 +1,17 @@
 package com.an.howtowear.utils;
 
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.util.Log;
 
 import com.an.howtowear.HTWApp;
+
+import java.util.List;
+import java.util.Locale;
 
 public class LocationUtil {
 
@@ -69,5 +75,22 @@ public class LocationUtil {
         } catch (SecurityException e){
             e.printStackTrace();
         }
+    }
+
+    public Address getAddressFromLatLon(double latitude, double longitude){
+
+        Geocoder geocoder = new Geocoder(HTWApp.getContext(), Locale.KOREA);
+        List<Address> addressList = null;
+
+        try {
+            addressList = geocoder.getFromLocation(latitude, longitude, 1);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        Log.e("Test", "latitude : " + latitude + " longitude : " + longitude + " addressList : " + addressList.toString());
+
+        //addressList == null이 될 수 있으니 방어코드 삽입 필요
+        return addressList.get(0);
     }
 }
