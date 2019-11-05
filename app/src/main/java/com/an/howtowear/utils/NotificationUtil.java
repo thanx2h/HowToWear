@@ -26,7 +26,7 @@ public class NotificationUtil {
 
     }
 
-    public static synchronized NotificationUtil getNotificationUtil() {
+    public static synchronized NotificationUtil getInstance() {
         if (notificationUtil == null) {
             notificationUtil = new NotificationUtil();
         }

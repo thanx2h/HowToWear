@@ -16,7 +16,7 @@ public class EventReceiver extends BroadcastReceiver {
 
         if(intent != null){
             if(intent.getAction() == AlarmUtil.ACTION_ALARM){
-                NotificationUtil.getNotificationUtil().showNotificationMessage();
+                NotificationUtil.getInstance().showNotificationMessage();
                 AlarmUtil.getInstance().setAlarm();
             }
 
