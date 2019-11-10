@@ -35,11 +35,9 @@ public class SplashActivity extends AppCompatActivity {
                 } else {
                     startPermissionActivity(requestPermissionList);
                 }
+                finish();
             }
         }, 3000);
-
-
-
     }
 
     public void startMainActivity(){
@@ -49,7 +47,7 @@ public class SplashActivity extends AppCompatActivity {
 
     public void startPermissionActivity(ArrayList<String> requestPermissionList){
         Intent intent = new Intent(this, PermissionActivity.class);
-        intent.putExtra("requestPermissionList", requestPermissionList);
+        intent.putStringArrayListExtra("requestPermissionList", requestPermissionList);
         startActivity(intent);
     }
 }

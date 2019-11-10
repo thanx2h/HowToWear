@@ -88,7 +88,7 @@ public class LocationUtil {
             e.printStackTrace();
         }
 
-        Log.e("Test", "latitude : " + latitude + " longitude : " + longitude + " addressList : " + addressList.toString());
+        HTWLog.i("latitude : " + latitude + " longitude : " + longitude + " addressList : " + addressList.toString());
 
         //addressList == null이 될 수 있으니 방어코드 삽입 필요
         return addressList.get(0);

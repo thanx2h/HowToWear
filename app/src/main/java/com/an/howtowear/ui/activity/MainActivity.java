@@ -24,6 +24,7 @@ import com.an.howtowear.network.HttpRequestHelper;
 import com.an.howtowear.network.response.ForecastListResponse;
 import com.an.howtowear.receiver.EventReceiver;
 import com.an.howtowear.utils.AlarmUtil;
+import com.an.howtowear.utils.HTWLog;
 import com.an.howtowear.utils.LocationUtil;
 import com.an.howtowear.utils.NotificationUtil;
 
@@ -164,8 +165,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onResponse(Call<ForecastListResponse> call, Response<ForecastListResponse> response) {
 
-                Log.e("HowToWear", call.toString());
-                Log.e("HowToWear", response.toString());
+                HTWLog.e(call.toString());
+                HTWLog.e(response.toString());
 
                 StringBuilder sb = new StringBuilder();
                 sb.append("onResponse\n\n");
@@ -183,8 +184,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onFailure(Call<ForecastListResponse> call, Throwable t) {
-                Log.e("HowToWear", call.toString());
-                Log.e("HowToWear", t.getMessage());
+                HTWLog.e(call.toString());
+                HTWLog.e(t.getMessage());
 
                 StringBuilder sb = new StringBuilder();
                 sb.append("onFailure\n\n");

@@ -9,14 +9,13 @@ import android.support.v4.content.ContextCompat;
 import com.an.howtowear.HTWApp;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class PermissionUtil {
 
     private static PermissionUtil permissionUtil;
 
-    public static int CODE_REQEUST_PERMISSION = 1;
+    public final static int CODE_REQEUST_PERMISSION = 1;
 
     private static String[] appRermissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
 
