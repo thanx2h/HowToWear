@@ -3,14 +3,18 @@ package com.an.howtowear.network.response.data;
 import com.google.gson.annotations.SerializedName;
 
 public class Weather{
+
     @SerializedName("id")
-    private String id;
+    private String id;     //    list.weather.id Weather condition id
+
     @SerializedName("main")
-    private String main;
+    private String main; //    list.weather.main Group of weather parameters (Rain, Snow, Extreme etc.)
+
     @SerializedName("description")
-    private String description;
+    private String description; //    list.weather.description Weather condition within the group
+
     @SerializedName("icon")
-    private String icon;
+    private String icon;//    list.weather.icon Weather icon id
 
     public String getId() {
         return id;

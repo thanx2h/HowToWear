@@ -3,10 +3,12 @@ package com.an.howtowear.network.response.data;
 import com.google.gson.annotations.SerializedName;
 
 public class Wind {
+
     @SerializedName("speed")
-    String speed;
+    String speed;    //    list.wind.speed Wind speed. Unit Default: meter/sec, Metric: meter/sec, Imperial: miles/hour.
+
     @SerializedName("deg")
-    String deg;
+    String deg; //    list.wind.deg Wind direction, degrees (meteorological)
 
     public String getSpeed() {
         return speed;

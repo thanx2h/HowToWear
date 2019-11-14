@@ -10,7 +10,7 @@ public class HTWLog {
     private HTWLog htwLog;
 
 //    private boolean isDebug =(HTWApp.getContext().getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE)!=0;
-    private static int LOG_LEVEL = BuildConfig.DEBUG? Log.WARN : Log.VERBOSE;
+    private static int LOG_LEVEL = BuildConfig.DEBUG? Log.VERBOSE : Log.WARN;
 
 
     private HTWLog() {
@@ -48,7 +48,7 @@ public class HTWLog {
         }
     }
 
-    public void d(String message){
+    public static void d(String message){
         if(LOG_LEVEL <= Log.DEBUG){
             Log.d(getTag(), printLog(message));
         }

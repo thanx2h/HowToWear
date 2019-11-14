@@ -4,9 +4,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class Coord {
     @SerializedName("lon")
-    private String lon;
+    private String lon; // city.coord.lat City geo location, latitude
+
     @SerializedName("lat")
-    private String lat;
+    private String lat; // city.coord.lon City geo location, longitude
 
     public String getLon() {
         return lon;

@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class Clouds{
     @SerializedName("all")
-    String all;
+    String all; //    list.clouds.all Cloudiness, %
 
     public String getAll() {
         return all;

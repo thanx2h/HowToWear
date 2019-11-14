@@ -12,7 +12,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +21,8 @@ import android.widget.Toast;
 import com.an.howtowear.R;
 import com.an.howtowear.network.HttpRequestHelper;
 import com.an.howtowear.network.response.ForecastListResponse;
+import com.an.howtowear.network.response.data.ForecastData;
+import com.an.howtowear.network.response.data.Weather;
 import com.an.howtowear.receiver.EventReceiver;
 import com.an.howtowear.utils.AlarmUtil;
 import com.an.howtowear.utils.HTWLog;
@@ -34,7 +35,7 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
 
-    private static final int DATA_COUNT = 5;
+    private static final int DATA_COUNT = 1;
 
     private TextView tvWeatherInfo;
     private TextView tvLocationData;
@@ -150,10 +151,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String[] locationData = LocationUtil.getInstance().requestLocationManually().split(":");
             latitude = Double.parseDouble(locationData[0]);
             longitude = Double.parseDouble(locationData[1]);
-            tvLocationData.setText("Manually\n\n, latitude: "+ locationData[0] +", longitude: "+ locationData[1]+"\n");
 
             Address address = LocationUtil.getInstance().getAddressFromLatLon(latitude, longitude);
-            tvLocationData.setText(address.getAddressLine(0)+"\n");
+            tvLocationData.setText("Manually\n\n, latitude: "+ locationData[0] +", longitude: "+ locationData[1]+ "address : " + address.getAddressLine(0)+"\n");
         }
     }
 
@@ -165,18 +165,61 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onResponse(Call<ForecastListResponse> call, Response<ForecastListResponse> response) {
 
-                HTWLog.e(call.toString());
-                HTWLog.e(response.toString());
-
                 StringBuilder sb = new StringBuilder();
-                sb.append("onResponse\n\n");
+
+                sb.append("onResponse, "+response.code()+"\n\n");
+                ForecastListResponse parseData = response.body();
+
+                HTWLog.d(parseData.toString());
 
                 if (response.code() == 200) {
-                    sb.append(call.toString());
-                    sb.append("\n\n"+response.body().toString());
+                    sb.append("\n\n");
+
+                    sb.append("도시 : \n");
+                    sb.append("-도시 id : " + parseData.getCity().getId()+"\n");
+                    sb.append("-도시 이름 : " + parseData.getCity().getName()+"\n");
+                    sb.append("-위도 : " + parseData.getCity().getCoord().getLat()+"\n");
+                    sb.append("-경도 : " + parseData.getCity().getCoord().getLon()+"\n");
+                    sb.append("-국가 : " + parseData.getCity().getCountry()+"\n");
+                    sb.append("-타임존: " + parseData.getCity().getTimezone()+"\n");
+
+                    sb.append("날짜 정보 갯수 : " + parseData.getCnt()+"\n");
+
+                    for(ForecastData fd : parseData.getForecastDataList()){
+                        sb.append("-예측시간(정수) : " + fd.getDt()+"\n");
+                        sb.append("-기온 : " + fd.getMain().getTemp()+"\n");
+                        sb.append("-최저 기온 : " + fd.getMain().getTemp_min()+"\n");
+                        sb.append("-최고 기온 : " + fd.getMain().getTemp_max()+"\n");
+                        sb.append("-기압 : " + fd.getMain().getPressure()+"\n");
+                        sb.append("-해수면에서의 기압 : " + fd.getMain().getSea_level()+"\n");
+                        sb.append("-대륙에서의 기압 : " + fd.getMain().getGrnd_level()+"\n");
+                        sb.append("-습기 : " + fd.getMain().getHumidity()+"\n");
+
+                        sb.append("-날씨 정보 리스트\n");
+                        for (Weather w : fd.getWeather()){
+                            sb.append("--날씨 상태 Id : " + w.getId()+"\n");
+                            sb.append("--날씨 상태 : " + w.getMain()+"\n");
+                            sb.append("--날씨 상태 설명 : " + w.getDescription()+"\n");
+                            sb.append("--날짜 아이콘 Id : " + w.getIcon()+"\n");
+                        }
+
+                        sb.append("-바람 \n");
+                        sb.append("--속도 : " + fd.getWind().getSpeed()+"\n");
+                        sb.append("--방향(각도) : " + fd.getWind().getDeg()+"\n");
+
+                        String rain = fd.getRain() == null ? "X" : fd.getRain().getThreeH();
+                        String snow = fd.getSnow() == null ? "X" : fd.getSnow().getThreeH();
+
+                        sb.append("-눈(3시간 전) : " + snow +"\n");
+                        sb.append("-비(3시간 전) : " + rain +"\n");
+
+                        String pod = fd.getSys() == null ? "X" : fd.getSys().getPod();
+
+                        sb.append("Sys : " + pod+"\n");
+                        sb.append("예측 날짜(텍스트): " + fd.getDt_txt()+"\n");
+                    }
                 } else {
-                    sb.append(call.toString());
-                    sb.append("\n\n"+response.code());
+                    sb.append("\n\n" + parseData.toString());
                 }
 
                 tvWeatherInfo.setText("" + sb.toString());
@@ -205,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             Address address = LocationUtil.getInstance().getAddressFromLatLon(latitude, longitude);
             tvLocationData.setText(address.getAddressLine(0)+"\n");
-            tvLocationData.setText("latitude: "+ latitude +", longitude: "+ longitude);
+            tvLocationData.setText("latitude: "+ latitude +", longitude: "+ longitude + " address : " + address.getAddressLine(0));
         }
 
         public void onStatusChanged(String provider, int status, Bundle extras) {

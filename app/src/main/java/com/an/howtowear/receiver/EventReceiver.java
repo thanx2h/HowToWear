@@ -6,18 +6,19 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.an.howtowear.utils.AlarmUtil;
+import com.an.howtowear.utils.HTWLog;
 import com.an.howtowear.utils.NotificationUtil;
 
 public class EventReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.e("TEST_HTW", intent.toString());
+        HTWLog.d(intent.toString());
 
         if(intent != null){
             if(intent.getAction() == AlarmUtil.ACTION_ALARM){
                 NotificationUtil.getInstance().showNotificationMessage();
-                AlarmUtil.getInstance().setAlarm();
+//                AlarmUtil.getInstance().setAlarm();
             }
 
         } else {
