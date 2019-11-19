@@ -8,7 +8,7 @@ import retrofit2.http.Query;
 
 public interface APIService {
 
-    @GET("forecast?appId="+HttpRequestHelper.API_KEY)
+    @GET("forecast?appId="+HttpRequestHelper.API_KEY+"&units=metric")
     Call<ForecastListResponse> getForecastList(
             @Query("lat") double lat,
             @Query("lon") double lon,

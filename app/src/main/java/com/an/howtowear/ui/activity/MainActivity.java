@@ -35,7 +35,7 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
 
-    private static final int DATA_COUNT = 1;
+    private static final int DATA_COUNT = 20;
 
     private TextView tvWeatherInfo;
     private TextView tvLocationData;
@@ -217,6 +217,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         sb.append("Sys : " + pod+"\n");
                         sb.append("예측 날짜(텍스트): " + fd.getDt_txt()+"\n");
+                        sb.append("\n");
                     }
                 } else {
                     sb.append("\n\n" + parseData.toString());
