@@ -8,7 +8,7 @@ public class Weather{
     private String id;     //    list.weather.id Weather condition id
 
     @SerializedName("main")
-    private String main; //    list.weather.main Group of weather parameters (Rain, Snow, Extreme etc.)
+    private String main; //    list.weather.main Group of weather parameters (Rain3, Snow3, Extreme etc.)
 
     @SerializedName("description")
     private String description; //    list.weather.description Weather condition within the group

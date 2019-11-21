@@ -21,11 +21,11 @@ public class ForecastData {
     @SerializedName("wind")
     private Wind wind;
 
-    @SerializedName("Rain")
-    private Rain rain;
+    @SerializedName("Rain3")
+    private Rain3 rain;
 
-    @SerializedName("Snow")
-    private Snow snow;
+    @SerializedName("Snow3")
+    private Snow3 snow;
 
     @SerializedName("Sys")
     private Sys sys;
@@ -73,19 +73,19 @@ public class ForecastData {
         this.wind = wind;
     }
 
-    public Rain getRain() {
+    public Rain3 getRain() {
         return rain;
     }
 
-    public void setRain(Rain rain) {
+    public void setRain(Rain3 rain) {
         this.rain = rain;
     }
 
-    public Snow getSnow() {
+    public Snow3 getSnow() {
         return snow;
     }
 
-    public void setSnow(Snow snow) {
+    public void setSnow(Snow3 snow) {
         this.snow = snow;
     }
 

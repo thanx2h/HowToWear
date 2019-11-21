@@ -84,11 +84,10 @@ public class LocationUtil {
 
         try {
             addressList = geocoder.getFromLocation(latitude, longitude, 1);
+            HTWLog.i("latitude : " + latitude + " longitude : " + longitude + " addressList : " + addressList.toString());
         } catch (Exception e){
-            e.printStackTrace();
+            HTWLog.e(e.getMessage());
         }
-
-        HTWLog.i("latitude : " + latitude + " longitude : " + longitude + " addressList : " + addressList.toString());
 
         //addressList == null이 될 수 있으니 방어코드 삽입 필요
         return addressList.get(0);

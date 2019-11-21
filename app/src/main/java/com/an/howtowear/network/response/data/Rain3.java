@@ -2,9 +2,9 @@ package com.an.howtowear.network.response.data;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Snow {
+public class Rain3 {
     @SerializedName("3h")
-    String threeH; // list.snow.3h Snow volume for last 3 hours
+    String threeH; // list.rain.3h Rain3 volume for last 3 hours, mm
 
     public String getThreeH() {
         return threeH;
@@ -16,7 +16,7 @@ public class Snow {
 
     @Override
     public String toString() {
-        return "Snow{" +
+        return "Rain3{" +
                 "threeH='" + threeH + '\'' +
                 '}';
     }

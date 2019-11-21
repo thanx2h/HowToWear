@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.an.howtowear.R;
 import com.an.howtowear.network.HttpRequestHelper;
 import com.an.howtowear.network.response.ForecastListResponse;
+import com.an.howtowear.network.response.WeatherResponse;
 import com.an.howtowear.network.response.data.ForecastData;
 import com.an.howtowear.network.response.data.Weather;
 import com.an.howtowear.receiver.EventReceiver;
@@ -39,7 +40,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private TextView tvWeatherInfo;
     private TextView tvLocationData;
-    private Button btnRequestForecast;
+    private Button btnReqForecast;
+    private Button btnReqCurWeather;
     private Button btnNotification;
 
     private EventReceiver eventReceiver;
@@ -71,8 +73,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_weatherInfo:
-                requestWeatherInfo();
+            case R.id.btn_cur_weather:
+                requestCurWeather();
+                break;
+
+            case R.id.btn_forecast_list:
+                requestForecastList();
                 break;
 
             case R.id.btn_notification:
@@ -137,10 +143,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         tvWeatherInfo = (TextView) findViewById(R.id.tv_weatherInfo);
         tvLocationData = (TextView) findViewById(R.id.tv_locationData);
-        btnRequestForecast = (Button) findViewById(R.id.btn_weatherInfo);
+        btnReqForecast = (Button) findViewById(R.id.btn_forecast_list);
+        btnReqCurWeather = (Button) findViewById(R.id.btn_cur_weather);
         btnNotification = (Button) findViewById(R.id.btn_notification);
-        btnRequestForecast.setOnClickListener(this);
+        btnReqForecast.setOnClickListener(this);
         btnNotification.setOnClickListener(this);
+        btnReqCurWeather.setOnClickListener(this);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -157,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void requestWeatherInfo(){
+    private void requestForecastList(){
         Call<ForecastListResponse> call
                 = HttpRequestHelper.getInstance().getApiService().getForecastList(latitude, longitude, DATA_COUNT);
 
@@ -228,6 +236,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onFailure(Call<ForecastListResponse> call, Throwable t) {
+                HTWLog.e(call.toString());
+                HTWLog.e(t.getMessage());
+
+                StringBuilder sb = new StringBuilder();
+                sb.append("onFailure\n\n");
+                sb.append(call.toString());
+                sb.append("\n\n"+t.getMessage());
+                tvWeatherInfo.setText("" + sb.toString());
+            }
+        };
+
+        call.enqueue(callback);
+    }
+
+    private void requestCurWeather(){
+        Call<WeatherResponse> call
+                = HttpRequestHelper.getInstance().getApiService().getCurWeather(latitude, longitude);
+
+        final Callback<WeatherResponse> callback = new Callback<WeatherResponse>() { //리스폰 시, 대응할 구현체
+            @Override
+            public void onResponse(Call<WeatherResponse> call, Response<WeatherResponse> response) {
+
+                StringBuilder sb = new StringBuilder();
+
+                sb.append("onResponse, "+response.code()+"\n\n");
+                WeatherResponse parseData = response.body();
+
+                HTWLog.d(parseData.toString());
+                sb.append(""+parseData.toString());
+                tvWeatherInfo.setText("" + sb.toString());
+            }
+
+            @Override
+            public void onFailure(Call<WeatherResponse> call, Throwable t) {
                 HTWLog.e(call.toString());
                 HTWLog.e(t.getMessage());
 
