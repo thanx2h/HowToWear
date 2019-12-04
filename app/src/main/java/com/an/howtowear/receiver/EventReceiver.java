@@ -3,11 +3,10 @@ package com.an.howtowear.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
-import com.an.howtowear.utils.AlarmUtil;
-import com.an.howtowear.utils.HTWLog;
-import com.an.howtowear.utils.NotificationUtil;
+import com.an.howtowear.support.utils.AlarmUtil;
+import com.an.howtowear.support.utils.HTWLog;
+import com.an.howtowear.support.utils.NotificationUtil;
 
 public class EventReceiver extends BroadcastReceiver {
 

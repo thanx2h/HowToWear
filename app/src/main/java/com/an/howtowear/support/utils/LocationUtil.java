@@ -1,4 +1,4 @@
-package com.an.howtowear.utils;
+package com.an.howtowear.support.utils;
 
 import android.content.Context;
 import android.location.Address;
@@ -6,10 +6,10 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.util.Log;
 
 import com.an.howtowear.HTWApp;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -47,7 +47,7 @@ public class LocationUtil {
             getLocationManager().requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
             getLocationManager().requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         } catch (SecurityException e){
-            e.printStackTrace();
+            HTWLog.e(e.getMessage());
         }
     }
 
@@ -62,7 +62,7 @@ public class LocationUtil {
                 lat = lastKnownLocation.getLatitude();
             }
         } catch (SecurityException e) {
-            e.printStackTrace();
+            HTWLog.e(e.getMessage());
         }
 
         return lng + ":" + lat;
@@ -73,23 +73,24 @@ public class LocationUtil {
             getLocationManager().removeUpdates(locationListener);
             locationManager = null;
         } catch (SecurityException e){
-            e.printStackTrace();
+            HTWLog.e(e.getMessage());
         }
     }
 
     public Address getAddressFromLatLon(double latitude, double longitude){
 
         Geocoder geocoder = new Geocoder(HTWApp.getContext(), Locale.KOREA);
-        List<Address> addressList = null;
+        Address address = null;
 
         try {
-            addressList = geocoder.getFromLocation(latitude, longitude, 1);
-            HTWLog.i("latitude : " + latitude + " longitude : " + longitude + " addressList : " + addressList.toString());
+            address = geocoder.getFromLocation(latitude, longitude, 1).get(0);
+            HTWLog.i("latitude : " + latitude + " longitude : " + longitude + " address : " + address.toString());
         } catch (Exception e){
             HTWLog.e(e.getMessage());
+            address = new Address(new Locale(Locale.getDefault().getCountry()));
         }
 
         //addressList == null이 될 수 있으니 방어코드 삽입 필요
-        return addressList.get(0);
+        return address;
     }
 }

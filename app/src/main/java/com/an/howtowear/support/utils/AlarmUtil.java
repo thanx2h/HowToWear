@@ -1,4 +1,4 @@
-package com.an.howtowear.utils;
+package com.an.howtowear.support.utils;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;

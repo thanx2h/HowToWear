@@ -6,12 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.an.howtowear.R;
-import com.an.howtowear.network.response.data.Main;
-import com.an.howtowear.utils.PermissionUtil;
+import com.an.howtowear.support.utils.PermissionUtil;
 
-import java.security.Permission;
 import java.util.ArrayList;
-import java.util.List;
 
 public class SplashActivity extends AppCompatActivity {
 

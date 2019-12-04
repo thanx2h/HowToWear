@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.an.howtowear.HTWApp;
 import com.an.howtowear.R;
 import com.an.howtowear.network.HttpRequestHelper;
 import com.an.howtowear.network.response.ForecastListResponse;
@@ -25,10 +26,10 @@ import com.an.howtowear.network.response.WeatherResponse;
 import com.an.howtowear.network.response.data.ForecastData;
 import com.an.howtowear.network.response.data.Weather;
 import com.an.howtowear.receiver.EventReceiver;
-import com.an.howtowear.utils.AlarmUtil;
-import com.an.howtowear.utils.HTWLog;
-import com.an.howtowear.utils.LocationUtil;
-import com.an.howtowear.utils.NotificationUtil;
+import com.an.howtowear.support.utils.AlarmUtil;
+import com.an.howtowear.support.utils.HTWLog;
+import com.an.howtowear.support.utils.LocationUtil;
+import com.an.howtowear.support.utils.NotificationUtil;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,11 +39,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private static final int DATA_COUNT = 20;
 
-    private TextView tvWeatherInfo;
-    private TextView tvLocationData;
+    private TextView tvCurWeatherData;
+    private TextView tvForecastData;
+//    private TextView tvLocationData;
     private Button btnReqForecast;
     private Button btnReqCurWeather;
-    private Button btnNotification;
+//    private Button btnNotification;
 
     private EventReceiver eventReceiver;
 
@@ -141,13 +143,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         drawLayout.addDrawerListener(actionBarDrawerToggle);
 
-        tvWeatherInfo = (TextView) findViewById(R.id.tv_weatherInfo);
-        tvLocationData = (TextView) findViewById(R.id.tv_locationData);
+        tvCurWeatherData = (TextView) findViewById(R.id.tv_curWeatherData);
+//        tvLocationData = (TextView) findViewById(R.id.tv_locationData);
+        tvForecastData = (TextView) findViewById(R.id.tv_forecastData);
         btnReqForecast = (Button) findViewById(R.id.btn_forecast_list);
         btnReqCurWeather = (Button) findViewById(R.id.btn_cur_weather);
-        btnNotification = (Button) findViewById(R.id.btn_notification);
+//        btnNotification = (Button) findViewById(R.id.btn_notification);
         btnReqForecast.setOnClickListener(this);
-        btnNotification.setOnClickListener(this);
+//        btnNotification.setOnClickListener(this);
         btnReqCurWeather.setOnClickListener(this);
         navigationView.setNavigationItemSelectedListener(this);
     }
@@ -155,13 +158,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void getLocationData(){
         if(LocationUtil.getInstance().isLocationProviderEnabled()){
             LocationUtil.getInstance().requestLocationUpdates(locationListener);
+
         } else {
             String[] locationData = LocationUtil.getInstance().requestLocationManually().split(":");
             latitude = Double.parseDouble(locationData[0]);
             longitude = Double.parseDouble(locationData[1]);
 
             Address address = LocationUtil.getInstance().getAddressFromLatLon(latitude, longitude);
-            tvLocationData.setText("Manually\n\n, latitude: "+ locationData[0] +", longitude: "+ locationData[1]+ "address : " + address.getAddressLine(0)+"\n");
+            if(address != null)
+                HTWLog.i("Manually, latitude: "+ locationData[0] +", longitude: "+ locationData[1]+ "address : " + address.getAddressLine(0));
+
+            LocationUtil.getInstance().removeLocationUpdates(locationListener);
         }
     }
 
@@ -227,11 +234,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         sb.append("예측 날짜(텍스트): " + fd.getDt_txt()+"\n");
                         sb.append("\n");
                     }
+
                 } else {
                     sb.append("\n\n" + parseData.toString());
                 }
 
-                tvWeatherInfo.setText("" + sb.toString());
+                tvForecastData.setText("" + sb.toString());
             }
 
             @Override
@@ -243,7 +251,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 sb.append("onFailure\n\n");
                 sb.append(call.toString());
                 sb.append("\n\n"+t.getMessage());
-                tvWeatherInfo.setText("" + sb.toString());
+                tvForecastData.setText("" + sb.toString());
             }
         };
 
@@ -265,7 +273,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 HTWLog.d(parseData.toString());
                 sb.append(""+parseData.toString());
-                tvWeatherInfo.setText("" + sb.toString());
+                tvCurWeatherData.setText("" + sb.toString());
             }
 
             @Override
@@ -277,7 +285,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 sb.append("onFailure\n\n");
                 sb.append(call.toString());
                 sb.append("\n\n"+t.getMessage());
-                tvWeatherInfo.setText("" + sb.toString());
+                tvCurWeatherData.setText("" + sb.toString());
             }
         };
 
@@ -290,20 +298,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             longitude = location.getLongitude();
 
             Address address = LocationUtil.getInstance().getAddressFromLatLon(latitude, longitude);
-            tvLocationData.setText(address.getAddressLine(0)+"\n");
-            tvLocationData.setText("latitude: "+ latitude +", longitude: "+ longitude + " address : " + address.getAddressLine(0));
+
+            if(address.getAddressLine(0) != null){
+                HTWLog.i("latitude: "+ latitude +", longitude: "+ longitude + " address : " + address.getAddressLine(0));
+
+//                MainActivity.this.requestCurWeather();
+//                MainActivity.this.requestForecastList();
+
+                LocationUtil.getInstance().removeLocationUpdates(this);
+            }
         }
 
         public void onStatusChanged(String provider, int status, Bundle extras) {
-            tvLocationData.setText("onStatusChanged, status : " + status + " bundle : " + extras.toString());
+            HTWLog.i("onStatusChanged, status : " + status + " bundle : " + extras.toString());
         }
 
         public void onProviderEnabled(String provider) {
-            tvLocationData.setText("onProviderEnabled, prvider : " + provider);
+            HTWLog.i("onProviderEnabled, prvider : " + provider);
         }
 
         public void onProviderDisabled(String provider) {
-            tvLocationData.setText("onProviderDisabled, prvider : " + provider);
+            HTWLog.i("onProviderDisabled, prvider : " + provider);
         }
     };
 }

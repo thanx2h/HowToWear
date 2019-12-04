@@ -11,8 +11,8 @@ import android.widget.Button;
 
 import com.an.howtowear.R;
 import com.an.howtowear.ui.HTWToast;
-import com.an.howtowear.utils.HTWLog;
-import com.an.howtowear.utils.PermissionUtil;
+import com.an.howtowear.support.utils.HTWLog;
+import com.an.howtowear.support.utils.PermissionUtil;
 
 import java.util.ArrayList;
 

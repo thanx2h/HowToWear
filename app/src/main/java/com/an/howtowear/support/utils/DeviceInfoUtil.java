@@ -1,4 +1,4 @@
-package com.an.howtowear.utils;
+package com.an.howtowear.support.utils;
 
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
