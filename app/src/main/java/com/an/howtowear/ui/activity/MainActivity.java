@@ -1,6 +1,7 @@
 package com.an.howtowear.ui.activity;
 
 import android.content.IntentFilter;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Location;
 import android.location.LocationListener;
@@ -15,6 +16,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +33,7 @@ import com.an.howtowear.support.utils.AlarmUtil;
 import com.an.howtowear.support.utils.HTWLog;
 import com.an.howtowear.support.utils.LocationUtil;
 import com.an.howtowear.support.utils.NotificationUtil;
+import com.an.howtowear.support.utils.UIUtil;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -188,58 +192,112 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 HTWLog.d(parseData.toString());
 
                 if (response.code() == 200) {
-                    sb.append("\n\n");
-
-                    sb.append("도시 : \n");
-                    sb.append("-도시 id : " + parseData.getCity().getId()+"\n");
-                    sb.append("-도시 이름 : " + parseData.getCity().getName()+"\n");
-                    sb.append("-위도 : " + parseData.getCity().getCoord().getLat()+"\n");
-                    sb.append("-경도 : " + parseData.getCity().getCoord().getLon()+"\n");
-                    sb.append("-국가 : " + parseData.getCity().getCountry()+"\n");
-                    sb.append("-타임존: " + parseData.getCity().getTimezone()+"\n");
-
-                    sb.append("날짜 정보 갯수 : " + parseData.getCnt()+"\n");
-
-                    for(ForecastData fd : parseData.getForecastDataList()){
-                        sb.append("-예측시간(정수) : " + fd.getDt()+"\n");
-                        sb.append("-기온 : " + fd.getMain().getTemp()+"\n");
-                        sb.append("-최저 기온 : " + fd.getMain().getTemp_min()+"\n");
-                        sb.append("-최고 기온 : " + fd.getMain().getTemp_max()+"\n");
-                        sb.append("-기압 : " + fd.getMain().getPressure()+"\n");
-                        sb.append("-해수면에서의 기압 : " + fd.getMain().getSea_level()+"\n");
-                        sb.append("-대륙에서의 기압 : " + fd.getMain().getGrnd_level()+"\n");
-                        sb.append("-습기 : " + fd.getMain().getHumidity()+"\n");
+                    for (ForecastData fd : parseData.getForecastDataList()) {
+                        sb.append("-예측시간(정수) : " + fd.getDt() + "\n");
+                        sb.append("-기온 : " + fd.getMain().getTemp() + "\n");
+                        sb.append("-최저 기온 : " + fd.getMain().getTemp_min() + "\n");
+                        sb.append("-최고 기온 : " + fd.getMain().getTemp_max() + "\n");
+                        sb.append("-기압 : " + fd.getMain().getPressure() + "\n");
+                        sb.append("-해수면에서의 기압 : " + fd.getMain().getSea_level() + "\n");
+                        sb.append("-대륙에서의 기압 : " + fd.getMain().getGrnd_level() + "\n");
+                        sb.append("-습기 : " + fd.getMain().getHumidity() + "\n");
 
                         sb.append("-날씨 정보 리스트\n");
-                        for (Weather w : fd.getWeather()){
-                            sb.append("--날씨 상태 Id : " + w.getId()+"\n");
-                            sb.append("--날씨 상태 : " + w.getMain()+"\n");
-                            sb.append("--날씨 상태 설명 : " + w.getDescription()+"\n");
-                            sb.append("--날짜 아이콘 Id : " + w.getIcon()+"\n");
+                        for (Weather w : fd.getWeather()) {
+                            sb.append("--날씨 상태 Id : " + w.getId() + "\n");
+                            sb.append("--날씨 상태 : " + w.getMain() + "\n");
+                            sb.append("--날씨 상태 설명 : " + w.getDescription() + "\n");
+                            sb.append("--날짜 아이콘 Id : " + w.getIcon() + "\n");
                         }
 
                         sb.append("-바람 \n");
-                        sb.append("--속도 : " + fd.getWind().getSpeed()+"\n");
-                        sb.append("--방향(각도) : " + fd.getWind().getDeg()+"\n");
+                        sb.append("--속도 : " + fd.getWind().getSpeed() + "\n");
+                        sb.append("--방향(각도) : " + fd.getWind().getDeg() + "\n");
 
                         String rain = fd.getRain() == null ? "X" : fd.getRain().getThreeH();
                         String snow = fd.getSnow() == null ? "X" : fd.getSnow().getThreeH();
 
-                        sb.append("-눈(3시간 전) : " + snow +"\n");
-                        sb.append("-비(3시간 전) : " + rain +"\n");
+                        sb.append("-눈(3시간 전) : " + snow + "\n");
+                        sb.append("-비(3시간 전) : " + rain + "\n");
 
                         String pod = fd.getSys() == null ? "X" : fd.getSys().getPod();
 
-                        sb.append("Sys : " + pod+"\n");
-                        sb.append("예측 날짜(텍스트): " + fd.getDt_txt()+"\n");
+                        sb.append("Sys : " + pod + "\n");
+                        sb.append("예측 날짜(텍스트): " + fd.getDt_txt() + "\n");
                         sb.append("\n");
+
+                        LinearLayout layout = (LinearLayout) findViewById(R.id.hsc_layout);
+
+                        TextView textView = new TextView(HTWApp.getContext());
+                        textView.setText(sb.toString());
+                        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT
+                        );
+
+                        // iv 객체 초기화
+                        ImageView iv = new ImageView(HTWApp.getContext());
+                        // 이미지 소스 지정
+                        int resId = UIUtil.getResIdValue("w_"+fd.getWeather().get(0).getIcon());
+
+                        HTWLog.i(R.drawable.w_04n + ", "+resId + " " + "w_"+fd.getWeather().get(0).getIcon());
+
+                        iv.setBackgroundResource(resId);
+                        // 이미지 크기
+                        // iv 객체를 layout 객체에 추가
+                        layout.addView(iv);
+//                        layout.addView(textView, p);
                     }
+//                    sb.append("\n\n");
+//
+//                    sb.append("도시 : \n");
+//                    sb.append("-도시 id : " + parseData.getCity().getId()+"\n");
+//                    sb.append("-도시 이름 : " + parseData.getCity().getName()+"\n");
+//                    sb.append("-위도 : " + parseData.getCity().getCoord().getLat()+"\n");
+//                    sb.append("-경도 : " + parseData.getCity().getCoord().getLon()+"\n");
+//                    sb.append("-국가 : " + parseData.getCity().getCountry()+"\n");
+//                    sb.append("-타임존: " + parseData.getCity().getTimezone()+"\n");
+//
+//                    sb.append("날짜 정보 갯수 : " + parseData.getCnt()+"\n");
+//
+//                    for(ForecastData fd : parseData.getForecastDataList()){
+//                        sb.append("-예측시간(정수) : " + fd.getDt()+"\n");
+//                        sb.append("-기온 : " + fd.getMain().getTemp()+"\n");
+//                        sb.append("-최저 기온 : " + fd.getMain().getTemp_min()+"\n");
+//                        sb.append("-최고 기온 : " + fd.getMain().getTemp_max()+"\n");
+//                        sb.append("-기압 : " + fd.getMain().getPressure()+"\n");
+//                        sb.append("-해수면에서의 기압 : " + fd.getMain().getSea_level()+"\n");
+//                        sb.append("-대륙에서의 기압 : " + fd.getMain().getGrnd_level()+"\n");
+//                        sb.append("-습기 : " + fd.getMain().getHumidity()+"\n");
+//
+//                        sb.append("-날씨 정보 리스트\n");
+//                        for (Weather w : fd.getWeather()){
+//                            sb.append("--날씨 상태 Id : " + w.getId()+"\n");
+//                            sb.append("--날씨 상태 : " + w.getMain()+"\n");
+//                            sb.append("--날씨 상태 설명 : " + w.getDescription()+"\n");
+//                            sb.append("--날짜 아이콘 Id : " + w.getIcon()+"\n");
+//                        }
+//
+//                        sb.append("-바람 \n");
+//                        sb.append("--속도 : " + fd.getWind().getSpeed()+"\n");
+//                        sb.append("--방향(각도) : " + fd.getWind().getDeg()+"\n");
+//
+//                        String rain = fd.getRain() == null ? "X" : fd.getRain().getThreeH();
+//                        String snow = fd.getSnow() == null ? "X" : fd.getSnow().getThreeH();
+//
+//                        sb.append("-눈(3시간 전) : " + snow +"\n");
+//                        sb.append("-비(3시간 전) : " + rain +"\n");
+//
+//                        String pod = fd.getSys() == null ? "X" : fd.getSys().getPod();
+//
+//                        sb.append("Sys : " + pod+"\n");
+//                        sb.append("예측 날짜(텍스트): " + fd.getDt_txt()+"\n");
+//                        sb.append("\n");
+//                    }
 
                 } else {
                     sb.append("\n\n" + parseData.toString());
                 }
-
-                tvForecastData.setText("" + sb.toString());
             }
 
             @Override
@@ -273,6 +331,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 HTWLog.d(parseData.toString());
                 sb.append(""+parseData.toString());
+
+                ImageView iv = new ImageView(HTWApp.getContext());
+                // 이미지 소스 지정
+                int resId = UIUtil.getResIdValue("w_"+parseData.getWeather().get(0).getIcon());
+
+                HTWLog.i(R.drawable.w_04n + ", "+resId + " " + "w_"+parseData.getWeather().get(0).getIcon());
+
+                iv.setBackgroundResource(resId);
+                // 이미지 크기
+                // iv 객체를 layout 객체에 추가
+//                layout.addView(iv);
+
                 tvCurWeatherData.setText("" + sb.toString());
             }
 
