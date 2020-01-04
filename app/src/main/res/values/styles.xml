@@ -1,7 +1,11 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="@style/Theme.AppCompat.NoActionBar">
-    </style>
+    <style name="AppTheme" parent="@style/Theme.AppCompat.Light.NoActionBar"></style>
+
+    <!-- App theme for Toolbar. -->
+    <style name="AppThemeForToolbar" parent="Theme.AppCompat.Light.NoActionBar"></style>
+
+
 
 </resources>

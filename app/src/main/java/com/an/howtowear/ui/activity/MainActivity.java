@@ -1,6 +1,8 @@
 package com.an.howtowear.ui.activity;
 
 import android.content.IntentFilter;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Location;
@@ -35,6 +37,9 @@ import com.an.howtowear.support.utils.LocationUtil;
 import com.an.howtowear.support.utils.NotificationUtil;
 import com.an.howtowear.support.utils.UIUtil;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int DATA_COUNT = 20;
 
     private TextView tvCurWeatherData;
+    private ImageView ivCurWeatherImg;
     private TextView tvForecastData;
 //    private TextView tvLocationData;
     private Button btnReqForecast;
@@ -130,9 +136,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //App Bar의 좌측 영영에 Drawer를 Open 하기 위한 Incon 추가
+        //App Bar의 좌측 영영에 Drawer를 Open 하기 위한 Icon 추가
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_launcher);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#000000")));
 
         DrawerLayout drawLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -148,6 +155,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         drawLayout.addDrawerListener(actionBarDrawerToggle);
 
         tvCurWeatherData = (TextView) findViewById(R.id.tv_curWeatherData);
+        ivCurWeatherImg = (ImageView)findViewById(R.id.main_weather);
 //        tvLocationData = (TextView) findViewById(R.id.tv_locationData);
         tvForecastData = (TextView) findViewById(R.id.tv_forecastData);
         btnReqForecast = (Button) findViewById(R.id.btn_forecast_list);
@@ -168,9 +176,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             latitude = Double.parseDouble(locationData[0]);
             longitude = Double.parseDouble(locationData[1]);
 
-            Address address = LocationUtil.getInstance().getAddressFromLatLon(latitude, longitude);
-            if(address != null)
-                HTWLog.i("Manually, latitude: "+ locationData[0] +", longitude: "+ locationData[1]+ "address : " + address.getAddressLine(0));
+//            Address address = LocationUtil.getInstance().getAddressFromLatLon(latitude, longitude);
+//            if(address != null)
+//                HTWLog.i("Manually, latitude: "+ locationData[0] +", longitude: "+ locationData[1]+ "address : " + address.getAddressLine(0));
 
             LocationUtil.getInstance().removeLocationUpdates(locationListener);
         }
@@ -193,38 +201,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 if (response.code() == 200) {
                     for (ForecastData fd : parseData.getForecastDataList()) {
-                        sb.append("-예측시간(정수) : " + fd.getDt() + "\n");
-                        sb.append("-기온 : " + fd.getMain().getTemp() + "\n");
-                        sb.append("-최저 기온 : " + fd.getMain().getTemp_min() + "\n");
-                        sb.append("-최고 기온 : " + fd.getMain().getTemp_max() + "\n");
-                        sb.append("-기압 : " + fd.getMain().getPressure() + "\n");
-                        sb.append("-해수면에서의 기압 : " + fd.getMain().getSea_level() + "\n");
-                        sb.append("-대륙에서의 기압 : " + fd.getMain().getGrnd_level() + "\n");
-                        sb.append("-습기 : " + fd.getMain().getHumidity() + "\n");
-
-                        sb.append("-날씨 정보 리스트\n");
-                        for (Weather w : fd.getWeather()) {
-                            sb.append("--날씨 상태 Id : " + w.getId() + "\n");
-                            sb.append("--날씨 상태 : " + w.getMain() + "\n");
-                            sb.append("--날씨 상태 설명 : " + w.getDescription() + "\n");
-                            sb.append("--날짜 아이콘 Id : " + w.getIcon() + "\n");
-                        }
-
-                        sb.append("-바람 \n");
-                        sb.append("--속도 : " + fd.getWind().getSpeed() + "\n");
-                        sb.append("--방향(각도) : " + fd.getWind().getDeg() + "\n");
-
-                        String rain = fd.getRain() == null ? "X" : fd.getRain().getThreeH();
-                        String snow = fd.getSnow() == null ? "X" : fd.getSnow().getThreeH();
-
-                        sb.append("-눈(3시간 전) : " + snow + "\n");
-                        sb.append("-비(3시간 전) : " + rain + "\n");
-
-                        String pod = fd.getSys() == null ? "X" : fd.getSys().getPod();
-
-                        sb.append("Sys : " + pod + "\n");
-                        sb.append("예측 날짜(텍스트): " + fd.getDt_txt() + "\n");
-                        sb.append("\n");
+//                        sb.append("-예측시간(정수) : " + fd.getDt() + "\n");
+//                        sb.append("-기온 : " + fd.getMain().getTemp() + "\n");
+//                        sb.append("-최저 기온 : " + fd.getMain().getTemp_min() + "\n");
+//                        sb.append("-최고 기온 : " + fd.getMain().getTemp_max() + "\n");
+//                        sb.append("-기압 : " + fd.getMain().getPressure() + "\n");
+//                        sb.append("-해수면에서의 기압 : " + fd.getMain().getSea_level() + "\n");
+//                        sb.append("-대륙에서의 기압 : " + fd.getMain().getGrnd_level() + "\n");
+//                        sb.append("-습기 : " + fd.getMain().getHumidity() + "\n");
+//
+//                        sb.append("-날씨 정보 리스트\n");
+//                        for (Weather w : fd.getWeather()) {
+//                            sb.append("--날씨 상태 Id : " + w.getId() + "\n");
+//                            sb.append("--날씨 상태 : " + w.getMain() + "\n");
+//                            sb.append("--날씨 상태 설명 : " + w.getDescription() + "\n");
+//                            sb.append("--날짜 아이콘 Id : " + w.getIcon() + "\n");
+//                        }
+//
+//                        sb.append("-바람 \n");
+//                        sb.append("--속도 : " + fd.getWind().getSpeed() + "\n");
+//                        sb.append("--방향(각도) : " + fd.getWind().getDeg() + "\n");
+//
+//                        String rain = fd.getRain() == null ? "X" : fd.getRain().getThreeH();
+//                        String snow = fd.getSnow() == null ? "X" : fd.getSnow().getThreeH();
+//
+//                        sb.append("-눈(3시간 전) : " + snow + "\n");
+//                        sb.append("-비(3시간 전) : " + rain + "\n");
+//
+//                        String pod = fd.getSys() == null ? "X" : fd.getSys().getPod();
+//
+//                        sb.append("Sys : " + pod + "\n");
+//                        sb.append("예측 날짜(텍스트): " + fd.getDt_txt() + "\n");
+//                        sb.append("\n");
 
                         LinearLayout layout = (LinearLayout) findViewById(R.id.hsc_layout);
 
@@ -239,7 +247,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         ImageView iv = new ImageView(HTWApp.getContext());
                         // 이미지 소스 지정
                         int resId = UIUtil.getResIdValue("w_"+fd.getWeather().get(0).getIcon());
-
                         HTWLog.i(R.drawable.w_04n + ", "+resId + " " + "w_"+fd.getWeather().get(0).getIcon());
 
                         iv.setBackgroundResource(resId);
@@ -326,23 +333,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 StringBuilder sb = new StringBuilder();
 
-                sb.append("onResponse, "+response.code()+"\n\n");
-                WeatherResponse parseData = response.body();
+                WeatherResponse wr = response.body();
 
-                HTWLog.d(parseData.toString());
-                sb.append(""+parseData.toString());
+                HTWLog.d(wr.toString());
+//                sb.append(""+wr.toString());
 
-                ImageView iv = new ImageView(HTWApp.getContext());
+                Address address = LocationUtil.getInstance().getAddressFromLatLon(latitude, longitude);
+                sb.append(address.getAdminArea() + " " + address.getSubLocality() + " " + address.getThoroughfare()+"\n");
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일 hh:mm:ss a");
+                String dateString = sdf.format(Long.parseLong(wr.getDt())*1000);
+                sb.append(dateString+"\n");
+
+                ImageView iv = (ImageView)findViewById(R.id.main_weather);
                 // 이미지 소스 지정
-                int resId = UIUtil.getResIdValue("w_"+parseData.getWeather().get(0).getIcon());
-
-                HTWLog.i(R.drawable.w_04n + ", "+resId + " " + "w_"+parseData.getWeather().get(0).getIcon());
-
-                iv.setBackgroundResource(resId);
+                int resId = UIUtil.getResIdValue("w_"+wr.getWeather().get(0).getIcon());
+                HTWLog.i(R.drawable.w_04n + ", "+resId + " " + "w_"+wr.getWeather().get(0).getIcon());
+                iv.setImageResource(resId);
                 // 이미지 크기
                 // iv 객체를 layout 객체에 추가
-//                layout.addView(iv);
-
                 tvCurWeatherData.setText("" + sb.toString());
             }
 
