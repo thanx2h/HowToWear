@@ -33,4 +33,7 @@ dependencies {
 
     // NavigationView
     implementation 'com.android.support:design:26.1.0'
+
+    // PreferenceFragmentCombat
+    implementation 'com.android.support:preference-v7:26.1.0'
 }

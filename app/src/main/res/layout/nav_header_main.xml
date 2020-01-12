@@ -8,10 +8,10 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <TextView
-        android:id="@+id/text"
+        android:id="@+id/navi_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select Item"
-        android:textSize="50dp" />
+        android:text="@string/navi_title"
+        android:textSize="10dp" />
 
 </LinearLayout>

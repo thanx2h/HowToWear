@@ -9,4 +9,9 @@
 
     <string name="toast_app_finish">HTW application is finished becauseo of permission disagree</string>
 
+    <string name="navi_title">How To Wear</string>
+    <string name="navi_setting">Settings</string>
+
+    <string name="pref_push_noti">Push Notification</string>
+
 </resources>

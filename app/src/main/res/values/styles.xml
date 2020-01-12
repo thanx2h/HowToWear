@@ -1,11 +1,14 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="@style/Theme.AppCompat.Light.NoActionBar"></style>
+    <style name="AppTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+    </style>
 
     <!-- App theme for Toolbar. -->
-    <style name="AppThemeForToolbar" parent="Theme.AppCompat.Light.NoActionBar"></style>
+<!--    <style name="AppThemeForToolbar" parent="Theme.AppCompat.Light.NoActionBar"></style>-->
 
-
+    <!-- Settings Preference -->
+    <style name="PreferenceLocaleTheme" parent="@style/PreferenceThemeOverlay"></style>
 
 </resources>

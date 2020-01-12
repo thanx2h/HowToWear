@@ -1,5 +1,6 @@
 package com.an.howtowear.ui.activity;
 
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -103,16 +104,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        Intent intent = null;
+
         switch (menuItem.getItemId())
         {
-            case R.id.menuitem1:
-                Toast.makeText(getApplicationContext(), "SelectedItem 1", Toast.LENGTH_SHORT).show();
+            case R.id.settings:
+                intent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(intent);
                 break;
-            case R.id.menuitem2:
-                Toast.makeText(getApplicationContext(), "SelectedItem 2", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.menuitem3:
-                Toast.makeText(getApplicationContext(), "SelectedItem 3", Toast.LENGTH_SHORT).show();
+//            case R.id.menuitem2:
+//                Toast.makeText(getApplicationContext(), "SelectedItem 2", Toast.LENGTH_SHORT).show();
+//                break;
+//            case R.id.menuitem3:
+//                Toast.makeText(getApplicationContext(), "SelectedItem 3", Toast.LENGTH_SHORT).show();
+//                break;
+            default:
                 break;
         }
 
