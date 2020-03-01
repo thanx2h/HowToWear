@@ -1,10 +1,8 @@
 package com.an.howtowear.ui.activity;
 
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Location;
 import android.location.LocationListener;
@@ -22,7 +20,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.an.howtowear.HTWApp;
 import com.an.howtowear.R;
@@ -30,16 +27,12 @@ import com.an.howtowear.network.HttpRequestHelper;
 import com.an.howtowear.network.response.ForecastListResponse;
 import com.an.howtowear.network.response.WeatherResponse;
 import com.an.howtowear.network.response.data.ForecastData;
-import com.an.howtowear.network.response.data.Weather;
-import com.an.howtowear.receiver.EventReceiver;
-import com.an.howtowear.support.utils.AlarmUtil;
 import com.an.howtowear.support.utils.HTWLog;
 import com.an.howtowear.support.utils.LocationUtil;
 import com.an.howtowear.support.utils.NotificationUtil;
 import com.an.howtowear.support.utils.UIUtil;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -57,8 +50,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btnReqCurWeather;
 //    private Button btnNotification;
 
-    private EventReceiver eventReceiver;
-
     private double latitude = 0;
     private double longitude = 0;
 
@@ -70,11 +61,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         this.initLayout();
         getLocationData();
-        AlarmUtil.getInstance().setAlarm();
-
-        eventReceiver = new EventReceiver();
-        registerReceiver(eventReceiver,new IntentFilter(AlarmUtil.ACTION_ALARM));
-
     }
 
     @Override

@@ -43,10 +43,10 @@ public class NotificationUtil {
     }
 
     public void showNotificationMessage() {
-        Intent notificationIntent = new Intent(HTWApp.getContext(), MainActivity.class);
-        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        Intent notiIntent = new Intent(HTWApp.getContext(), MainActivity.class);
+        notiIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(HTWApp.getContext(), 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(HTWApp.getContext(), 0, notiIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(HTWApp.getContext(), NOTIFICATION_CHANNEL_ID)
                 .setLargeIcon(BitmapFactory.decodeResource(HTWApp.getContext().getResources(), R.drawable.ic_launcher_foreground)) //BitMap 이미지 요구
                 .setContentTitle("상태바 드래그시 보이는 타이틀")
@@ -71,5 +71,8 @@ public class NotificationUtil {
             builder.setSmallIcon(R.mipmap.ic_launcher); // Oreo 이하에서 mipmap 사용하지 않으면 Couldn't create icon: StatusBarIcon 에러남
 
         getNotificationManager().notify(NOTIFICATION_UNIQUE_ID, builder.build()); // 고유숫자로 노티피케이션 동작시킴
+
+
+
     }
 }

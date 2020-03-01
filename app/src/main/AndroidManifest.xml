@@ -5,6 +5,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
+<!--    화면이 어두워져 있을 때 ( 잠금상태 일 때 ) 화면을 깨울때 주는 권한이다.-->
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:name=".HTWApp"
@@ -24,6 +28,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
 
+        <receiver android:name=".receiver.AlarmEventReceiver">
+            <intent-filter>
+                <action android:name="com.an.howtowear.action.alarm"></action>
+            </intent-filter>
+        </receiver>
+    </application>
 </manifest>

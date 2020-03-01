@@ -1,6 +1,7 @@
 package com.an.howtowear.ui.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.preference.DialogPreference;
 import android.support.v7.preference.Preference;
@@ -8,11 +9,13 @@ import android.support.v7.preference.PreferenceDialogFragmentCompat;
 import android.view.View;
 import android.widget.TimePicker;
 
+import com.an.howtowear.HTWApp;
+import com.an.howtowear.support.utils.AlarmUtil;
 import com.an.howtowear.ui.dialog.TimePreference;
 
 public class TimePreferenceDialogFragmentCompat extends PreferenceDialogFragmentCompat implements DialogPreference.TargetFragment {
 
-    TimePicker timePicker = null;
+    private TimePicker timePicker = null;
 
     public static TimePreferenceDialogFragmentCompat newInstance(String key) {
         final TimePreferenceDialogFragmentCompat fragment = new TimePreferenceDialogFragmentCompat();
@@ -45,7 +48,10 @@ public class TimePreferenceDialogFragmentCompat extends PreferenceDialogFragment
             pref.minute = timePicker.getCurrentMinute();
 
             String value = TimePreference.timeToString(pref.hour, pref.minute);
-//            if (pref.callChangeListener(value)) pref.persistStringValue(value);
+            if (pref.callChangeListener(value)) pref.persistStringValue(value);
+
+            // Alarm Setting
+            AlarmUtil.getInstance().setAlarm();
         }
     }
 

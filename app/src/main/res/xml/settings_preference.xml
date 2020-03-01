@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="Setting">
+    <PreferenceCategory android:title="Notification">
 
         <SwitchPreferenceCompat
-            android:key="push_noti"
-            android:title="push notification" />
+            android:key="weather_push"
+            android:title="Receive Weather Push" />
 
         <com.an.howtowear.ui.dialog.TimePreference
-            android:key="timePrefA_Key"
-            android:title="timePrefA_title" />
-        <com.an.howtowear.ui.dialog.TimePreference
-            android:key="timePrefB_Key"
-            android:title="timePrefB_title" />
+            android:key="time_setting"
+            android:title="Time Setting" />
 
     </PreferenceCategory>
 
