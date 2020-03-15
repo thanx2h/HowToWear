@@ -10,6 +10,10 @@ public class TimePreference extends DialogPreference {
     public int hour = 0;
     public int minute = 0;
 
+    public TimePreference(Context context) {
+        super(context);
+    }
+
     public TimePreference(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
@@ -23,7 +27,7 @@ public class TimePreference extends DialogPreference {
     protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
         String value;
         if (restoreValue) {
-            if (defaultValue == null) value = getPersistedString("00:00");
+            if (defaultValue == null) value = getPersistedString("0");
             else value = getPersistedString(defaultValue.toString());
         } else {
             value = defaultValue.toString();
@@ -52,11 +56,11 @@ public class TimePreference extends DialogPreference {
         }
     }
 
-    public static String timeToString(int h, int m) {
-        return String.format("%02d", h) + ":" + String.format("%02d", m);
-    }
-
     public void persistStringValue(String value) {
         persistString(value);
+    }
+
+    public void persistLongValue(Long value) {
+        persistLong(value);
     }
 }

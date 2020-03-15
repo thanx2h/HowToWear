@@ -6,9 +6,11 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.VIBRATE"/>
-<!--    화면이 어두워져 있을 때 ( 잠금상태 일 때 ) 화면을 깨울때 주는 권한이다.-->
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
+    <!-- 배터리 사용량 최적화 제외하기위한 권한 (사용자 동의 필요) -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
     <application
         android:name=".HTWApp"
@@ -31,7 +33,8 @@
 
         <receiver android:name=".receiver.AlarmEventReceiver">
             <intent-filter>
-                <action android:name="com.an.howtowear.action.alarm"></action>
+                <action android:name="com.an.howtowear.action.alarm"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
     </application>
