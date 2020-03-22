@@ -37,5 +37,15 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
+        <receiver android:name=".receiver.EventReceiver">
+            <intent-filter>
+                <action android:name="com.an.howtowear.intent.weather.noti" />
+            </intent-filter>
+        </receiver>
+
+
+        <service android:name=".service.NetworkService" ></service>
+
     </application>
 </manifest>

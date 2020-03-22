@@ -19,12 +19,13 @@ import java.util.Calendar;
 
 public class AlarmUtil {
 
-    public static final String ACTION_ALARM = "com.an.howtowear.action.alarm";
+    public static final String ACTION_ALARM_RECEIVED = "com.an.howtowear.action.alarm";
 
     private static AlarmUtil alarmUtil;
     private static AlarmManager alarmManager;
 
     private AlarmUtil() {
+
     }
 
     public static synchronized AlarmUtil getInstance() {
@@ -53,7 +54,7 @@ public class AlarmUtil {
 
         // 알람 셋팅을 위한 pendingIntent 구현
         Intent alarmIntent = new Intent(HTWApp.getContext(), AlarmEventReceiver.class);
-        alarmIntent.setAction(AlarmUtil.ACTION_ALARM);
+        alarmIntent.setAction(AlarmUtil.ACTION_ALARM_RECEIVED);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(HTWApp.getContext(), 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 //        getAlarmManager().setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
@@ -78,7 +79,7 @@ public class AlarmUtil {
         HTWLog.i("cancelAlarm()");
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
 
-        Intent Intent = new Intent(AlarmUtil.ACTION_ALARM);
+        Intent Intent = new Intent(AlarmUtil.ACTION_ALARM_RECEIVED);
         PendingIntent pIntent = PendingIntent.getBroadcast(context, 0, Intent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.cancel(pIntent);
 

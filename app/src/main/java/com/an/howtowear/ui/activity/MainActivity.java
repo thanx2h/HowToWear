@@ -60,6 +60,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         this.initLayout();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         getLocationData();
     }
 
@@ -81,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.btn_notification:
-                NotificationUtil.getInstance().showNotificationMessage();
+//                NotificationUtil.getInstance().showNotificationMessage();
                 break;
             default:
                 break;
@@ -172,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //            if(address != null)
 //                HTWLog.i("Manually, latitude: "+ locationData[0] +", longitude: "+ locationData[1]+ "address : " + address.getAddressLine(0));
 
-            LocationUtil.getInstance().removeLocationUpdates(locationListener);
+            LocationUtil.getInstance().requestLocationUpdates(locationListener);
         }
     }
 
