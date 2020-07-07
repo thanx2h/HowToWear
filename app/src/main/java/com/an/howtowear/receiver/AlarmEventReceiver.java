@@ -32,7 +32,7 @@ import retrofit2.Response;
 public class AlarmEventReceiver extends BroadcastReceiver {
 
 //    private static final int ALARM_PERIOD = 1000 * 60 * 60 * 24;
-    private static final int ALARM_PERIOD = 1000 * 60 * 1;
+    private static final int ALARM_PERIOD = 1000 * 60 * 30;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -51,7 +51,6 @@ public class AlarmEventReceiver extends BroadcastReceiver {
 //                pref.persistStringValue(value);
 
                 AlarmUtil.getInstance().setAlarm(System.currentTimeMillis(), ALARM_PERIOD);
-
                 Intent intentService = new Intent(context, NetworkService.class);
                 context.startService(intentService);
             }

@@ -84,4 +84,8 @@ public class NotificationUtil {
 //        NotificationManagerCompat.from(HTWApp.getContext()).notify(NOTIFICATION_UNIQUE_ID, builder.build());
 
     }
+
+    public void deleteNotification(){
+
+    }
 }

@@ -12,6 +12,7 @@ import com.an.howtowear.network.HttpRequestHelper;
 import com.an.howtowear.network.response.WeatherResponse;
 import com.an.howtowear.support.utils.HTWLog;
 import com.an.howtowear.support.utils.LocationUtil;
+import com.an.howtowear.support.utils.NotificationUtil;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -21,6 +22,8 @@ public class NetworkService extends HTWService {
 
     private double latitude = 0;
     private double longitude = 0;
+
+    public static NetworkService networkService = null;
 
     @Nullable
     @Override
@@ -32,7 +35,7 @@ public class NetworkService extends HTWService {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        networkService = this;
         HTWLog.i("onCreate in");
 
 //        Intent intent = new Intent(this, EventReceiver.class);
@@ -44,7 +47,8 @@ public class NetworkService extends HTWService {
     public int onStartCommand(Intent intent, int flags, int startId) {
         HTWLog.i("onStartCommand in");
         getLocationData();
-        this.onDestroy();
+        NotificationUtil.getInstance().showNotificationMessage("알람", "알람 도착");
+//        this.onDestroy();
         return START_STICKY; // 강제종료 시 재생성
     }
 
@@ -64,19 +68,19 @@ public class NetworkService extends HTWService {
             public void onResponse(Call<WeatherResponse> call, Response<WeatherResponse> response) {
 
                 StringBuilder sb = new StringBuilder();
-
                 WeatherResponse wr = response.body();
-
                 HTWLog.d(wr.toString());
                 LocationUtil.getInstance().removeLocationUpdates(locationListener);
 //                sb.append(""+wr.toString());
+                NotificationUtil.getInstance().showNotificationMessage("알람", "날씨 도착 : " + wr.toString());
+                networkService.onDestroy();
             }
 
             @Override
             public void onFailure(Call<WeatherResponse> call, Throwable t) {
                 HTWLog.e(call.toString());
                 HTWLog.e(t.getMessage());
-
+                networkService.onDestroy();
             }
         };
 
@@ -110,10 +114,9 @@ public class NetworkService extends HTWService {
 
             if(address.getAddressLine(0) != null){
                 HTWLog.i("latitude: "+ latitude +", longitude: "+ longitude + " address : " + address.getAddressLine(0));
-
                 requestCurWeather();
+                NotificationUtil.getInstance().showNotificationMessage("알람", "현재의 위치 가져오는중");
 //                MainActivity.this.requestForecastList();
-
                 LocationUtil.getInstance().removeLocationUpdates(this);
             }
         }
